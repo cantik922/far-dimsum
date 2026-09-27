@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Kasir - Far Dimsum</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            background: linear-gradient(135deg, #8b0000, #d71920);
+            color: white;
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: white;
+            color: #b00000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+            border: 3px solid #ffd700;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .brand p {
+            margin: 3px 0 0;
+            font-size: 13px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .kasir-user {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 13px;
+            border-radius: 8px;
+        }
+
+        .header-btn {
+            border: none;
+            background: white;
+            color: #a00000;
+            padding: 9px 14px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .header-btn:hover {
+            background: #ffd700;
+        }
+
+        /* =========================
+           LAYOUT
+        ========================= */
+
+        .container {
+            max-width: 1400px;
+            margin: auto;
+            padding: 25px;
+        }
+
+        .page-title {
+            margin-bottom: 20px;
+        }
+
+        .page-title h2 {
+            margin: 0;
+            color: #9b0000;
+        }
+
+        .page-title p {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 390px;
+            gap: 25px;
+            align-items: start;
+        }
+
+        /* =========================
+           KATEGORI
+        ========================= */
+
+        .category-box {
+            background: white;
+            padding: 18px;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .category-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #8b0000;
+            margin-bottom: 13px;
+        }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .category-btn {
+            border: 2px solid #d71920;
+            background: white;
+            color: #a00000;
+            padding: 10px 14px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: #d71920;
+            color: white;
+        }
+
+        /* =========================
+           MENU
+        ========================= */
+
+        .menu-box {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .menu-title {
+            color: #8b0000;
+            margin-top: 0;
+            margin-bottom: 18px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .menu-card {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 16px;
+            background: #fff;
+            transition: 0.2s;
+        }
+
+        .menu-card:hover {
+            border-color: #d71920;
+            box-shadow: 0 4px 12px rgba(215,25,32,0.15);
+            transform: translateY(-2px);
+        }
+
+        .menu-name {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .menu-price {
+            color: #d71920;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .add-btn {
+            width: 100%;
+            border: none;
+            background: #d71920;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .add-btn:hover {
+            background: #a80000;
+        }
+
+        /* =========================
+           KERANJANG
+        ========================= */
+
+        .cart-box {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 95px;
+        }
+
+        .cart-title {
+            margin-top: 0;
+            color: #8b0000;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 12px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #888;
+            padding: 30px 10px;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #eee;
+            padding: 12px 0;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .cart-item-price {
+            color: #d71920;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quantity-buttons {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 6px;
+            background: #d71920;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .qty-number {
+            min-width: 25px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .remove-btn {
+            border: none;
+            background: #eee;
+            color: #c00000;
+            padding: 6px 9px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .remove-btn:hover {
+            background: #ffdede;
+        }
+
+        /* =========================
+           TOTAL
+        ========================= */
+
+        .summary {
+            border-top: 2px solid #ddd;
+            margin-top: 15px;
+            padding-top: 15px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+        }
+
+        .total-row {
+            font-size: 22px;
+            font-weight: bold;
+            color: #a00000;
+            margin-top: 14px;
+        }
+
+        /* =========================
+           PEMBAYARAN
+        ========================= */
+
+        .payment-box {
+            margin-top: 20px;
+        }
+
+        .payment-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .payment-box input,
+        .payment-box select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .change-box {
+            background: #fff5cc;
+            border: 1px solid #ffd700;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
+        .pay-btn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #008000;
+            color: white;
+            font-weight: bold;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        .pay-btn:hover {
+            background: #006400;
+        }
+
+        .clear-btn {
+            width: 100%;
+            margin-top: 8px;
+            padding: 11px;
+            border: none;
+            border-radius: 8px;
+            background: #eee;
+            color: #a00000;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* =========================
+           NOTIFIKASI
+        ========================= */
+
+        .notification {
+            display: none;
+            position: fixed;
+            top: 85px;
+            right: 25px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            z-index: 999;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.25);
+        }
+
+        .notification.success {
+            background: #008000;
+        }
+
+        .notification.error {
+            background: #d71920;
+        }
+
+        /* =========================
+           RESPONSIVE HP
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-box {
+                position: static;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .container {
+                padding: 12px;
+            }
+
+            .brand h1 {
+                font-size: 20px;
+            }
+
+            .category-btn {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
+
+            .menu-card {
+                padding: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="brand-circle">
+            FAR<br>DIMSUM
+        </div>
+
+        <div>
+            <h1>FAR DIMSUM</h1>
+            <p>Sistem Kasir</p>
+        </div>
+
+    </div>
+
+    <div class="header-right">
+
+        <div class="kasir-user">
+            👤 Kasir: <strong>{{ kasir }}</strong>
+        </div>
+
+        <a href="/riwayat" class="header-btn">
+            📋 Riwayat
+        </a>
+
+        <a href="/logout" class="header-btn">
+            Keluar
+        </a>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <div class="page-title">
+
+        <h2>🧾 Kasir Far Dimsum</h2>
+
+        <p>
+            Pilih kategori dan menu yang dipesan pelanggan.
+        </p>
+
+    </div>
+
+
+    <div class="main-grid">
+
+        <!-- =========================
+             BAGIAN MENU
+        ========================= -->
+
+        <div>
+
+            <!-- KATEGORI -->
+
+            <div class="category-box">
+
+                <div class="category-title">
+                    📂 Kategori Menu
+                </div>
+
+                <div class="categories">
+
+                    <button
+                        class="category-btn active"
+                        onclick="tampilkanKategori('mentai', this)">
+                        Dimsum Mentai
+                    </button>
+
+                    <button
+                        class="category-btn"
+                        onclick="tampilkanKategori('keju', this)">
+                        Mentai Keju
+                    </button>
+
+                    <button
+                        class="category-btn"
+                        onclick="tampilkanKategori('mix', this)">
+                        Dimsum Mix
+                    </button>
+
+                    <button
+                        class="category-btn"
+                        onclick="tampilkanKategori('original', this)">
+                        Bakar Original
+                    </button>
+
+                    <button
+                        class="category-btn"
+                        onclick="tampilkanKategori('lava', this)">
+                        Bakar Lava
+                    </button>
+
+                    <button
+                        class="category-btn"
+                        onclick="tampilkanKategori('bakarmentai', this)">
+                        Bakar Mentai
+                    </button>
+
+                    <button
+                        class="category-btn"
+                        onclick="tampilkanKategori('bakarkeju', this)">
+                        Bakar Mentai Keju
+                    </button>
+
+                    <button
+                        class="category-btn"
+                        onclick="tampilkanKategori('birthday', this)">
+                        Special Paket
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- MENU -->
+
+            <div class="menu-box">
+
+                <h3 class="menu-title" id="judulKategori">
+                    Dimsum Mentai
+                </h3>
+
+
+                <!-- =====================
+                     MENTAI
+                ====================== -->
+
+                <div class="menu-grid kategori-menu" id="mentai">
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mentai Isi 3
+                        </div>
+
+                        <div class="menu-price">
+                            Rp15.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mentai Isi 3',15000,'Dimsum Mentai')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mentai Isi 4
+                        </div>
+
+                        <div class="menu-price">
+                            Rp20.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mentai Isi 4',20000,'Dimsum Mentai')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mentai Isi 6
+                        </div>
+
+                        <div class="menu-price">
+                            Rp25.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mentai Isi 6',25000,'Dimsum Mentai')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mentai Isi 8
+                        </div>
+
+                        <div class="menu-price">
+                            Rp35.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mentai Isi 8',35000,'Dimsum Mentai')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mentai Isi 12
+                        </div>
+
+                        <div class="menu-price">
+                            Rp50.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mentai Isi 12',50000,'Dimsum Mentai')">
+                            + Tambah
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <!-- =====================
+                     MENTAI KEJU
+                ====================== -->
+
+                <div class="menu-grid kategori-menu" id="keju" style="display:none;">
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mentai Keju Isi 3
+                        </div>
+
+                        <div class="menu-price">
+                            Rp18.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mentai Keju Isi 3',18000,'Mentai Keju')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mentai Keju Isi 4
+                        </div>
+
+                        <div class="menu-price">
+                            Rp23.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mentai Keju Isi 4',23000,'Mentai Keju')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mentai Keju Isi 6
+                        </div>
+
+                        <div class="menu-price">
+                            Rp28.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mentai Keju Isi 6',28000,'Mentai Keju')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mentai Keju Isi 8
+                        </div>
+
+                        <div class="menu-price">
+                            Rp38.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mentai Keju Isi 8',38000,'Mentai Keju')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mentai Keju Isi 12
+                        </div>
+
+                        <div class="menu-price">
+                            Rp56.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mentai Keju Isi 12',56000,'Mentai Keju')">
+                            + Tambah
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <!-- =====================
+                     MIX
+                ====================== -->
+
+                <div class="menu-grid kategori-menu" id="mix" style="display:none;">
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mix Isi 4
+                        </div>
+
+                        <div class="menu-price">
+                            Rp23.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mix Isi 4',23000,'Dimsum Mix')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mix Isi 6
+                        </div>
+
+                        <div class="menu-price">
+                            Rp28.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mix Isi 6',28000,'Dimsum Mix')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mix Isi 8
+                        </div>
+
+                        <div class="menu-price">
+                            Rp38.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mix Isi 8',38000,'Dimsum Mix')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Mix Isi 12
+                        </div>
+
+                        <div class="menu-price">
+                            Rp56.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Mix Isi 12',56000,'Dimsum Mix')">
+                            + Tambah
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <!-- =====================
+                     BAKAR ORIGINAL
+                ====================== -->
+
+                <div class="menu-grid kategori-menu" id="original" style="display:none;">
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Bakar Original Isi 3
+                        </div>
+
+                        <div class="menu-price">
+                            Rp15.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Bakar Original Isi 3',15000,'Dimsum Bakar Original')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Bakar Original Isi 4
+                        </div>
+
+                        <div class="menu-price">
+                            Rp18.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Bakar Original Isi 4',18000,'Dimsum Bakar Original')">
+                            + Tambah
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <!-- =====================
+                     BAKAR LAVA
+                ====================== -->
+
+                <div class="menu-grid kategori-menu" id="lava" style="display:none;">
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Bakar Lava Isi 3
+                        </div>
+
+                        <div class="menu-price">
+                            Rp15.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Bakar Lava Isi 3',15000,'Dimsum Bakar Lava')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Bakar Lava Isi 4
+                        </div>
+
+                        <div class="menu-price">
+                            Rp18.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Bakar Lava Isi 4',18000,'Dimsum Bakar Lava')">
+                            + Tambah
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <!-- =====================
+                     BAKAR MENTAI
+                ====================== -->
+
+                <div class="menu-grid kategori-menu" id="bakarmentai" style="display:none;">
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Bakar Mentai Isi 3
+                        </div>
+
+                        <div class="menu-price">
+                            Rp15.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Bakar Mentai Isi 3',15000,'Dimsum Bakar Mentai')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Bakar Mentai Isi 4
+                        </div>
+
+                        <div class="menu-price">
+                            Rp20.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Bakar Mentai Isi 4',20000,'Dimsum Bakar Mentai')">
+                            + Tambah
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <!-- =====================
+                     BAKAR MENTAI KEJU
+                ====================== -->
+
+                <div class="menu-grid kategori-menu" id="bakarkeju" style="display:none;">
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Bakar Mentai Keju Isi 3
+                        </div>
+
+                        <div class="menu-price">
+                            Rp18.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Bakar Mentai Keju Isi 3',18000,'Dimsum Bakar Mentai Keju')">
+                            + Tambah
+                        </button>
+                    </div>
+
+
+                    <div class="menu-card">
+                        <div class="menu-name">
+                            Bakar Mentai Keju Isi 4
+                        </div>
+
+                        <div class="menu-price">
+                            Rp23.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Bakar Mentai Keju Isi 4',23000,'Dimsum Bakar Mentai Keju')">
+                            + Tambah
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <!-- =====================
+                     BIRTHDAY
+                ====================== -->
+
+                <div class="menu-grid kategori-menu" id="birthday" style="display:none;">
+
+                    <div class="menu-card">
+
+                        <div class="menu-name">
+                            🎂 Dimsum Birthday
+                        </div>
+
+                        <div class="menu-price">
+                            Rp65.000
+                        </div>
+
+                        <button class="add-btn"
+                            onclick="tambahKeranjang('Dimsum Birthday',65000,'Special Paket')">
+                            + Tambah
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             KERANJANG
+        ========================= -->
+
+        <div class="cart-box">
+
+            <h2 class="cart-title">
+                🛒 Keranjang
+            </h2>
+
+            <div id="cartItems">
+
+                <div class="empty-cart">
+                    Keranjang masih kosong.
+                    <br>
+                    Silakan pilih menu.
+                </div>
+
+            </div>
+
+
+            <div class="summary">
+
+                <div class="summary-row">
+                    <span>Jumlah item</span>
+                    <strong id="jumlahItem">0</strong>
+                </div>
+
+                <div class="summary-row total-row">
+                    <span>Total</span>
+                    <span id="totalHarga">
+                        Rp0
+                    </span>
+                </div>
+
+            </div>
+
+
+            <!-- PEMBAYARAN -->
+
+            <div class="payment-box">
+
+                <label for="tipe">
+                    Tipe Pesanan
+                </label>
+
+                <select id="tipe">
+
+                    <option value="Dine In">
+                        Dine In
+                    </option>
+
+                    <option value="Take Away">
+                        Take Away
+                    </option>
+
+                </select>
+
+
+                <label for="pembayaran">
+                    Uang Pembayaran
+                </label>
+
+                <input
+                    type="number"
+                    id="pembayaran"
+                    placeholder="Masukkan uang pelanggan"
+                    min="0"
+                    oninput="hitungKembalian()"
+                >
+
+
+                <div class="change-box">
+                    Kembalian:
+                    <span id="kembalian">
+                        Rp0
+                    </span>
+                </div>
+
+
+                <button
+                    class="pay-btn"
+                    onclick="simpanTransaksi()">
+
+                    💰 SIMPAN TRANSAKSI
+
+                </button>
+
+
+                <button
+                    class="clear-btn"
+                    onclick="kosongkanKeranjang()">
+
+                    🗑️ Kosongkan Keranjang
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- NOTIFIKASI -->
+
+<div
+    id="notification"
+    class="notification">
+</div>
+
+
+<script>
+
+    /* =========================
+       DATA KERANJANG
+    ========================= */
+
+    let keranjang = [];
+
+
+    /* =========================
+       FORMAT RUPIAH
+    ========================= */
+
+    function formatRupiah(angka) {
+
+        return "Rp" + Number(angka).toLocaleString("id-ID");
+
+    }
+
+
+    /* =========================
+       KATEGORI
+    ========================= */
+
+    function tampilkanKategori(kategori, tombol) {
+
+        const semuaMenu =
+            document.querySelectorAll(".kategori-menu");
+
+        semuaMenu.forEach(function(menu) {
+
+            menu.style.display = "none";
+
+        });
+
+
+        const menuDipilih =
+            document.getElementById(kategori);
+
+        if (menuDipilih) {
+
+            menuDipilih.style.display = "grid";
+
+        }
+
+
+        const semuaTombol =
+            document.querySelectorAll(".category-btn");
+
+        semuaTombol.forEach(function(btn) {
+
+            btn.classList.remove("active");
+
+        });
+
+
+        tombol.classList.add("active");
+
+
+        const namaKategori = {
+
+            mentai: "Dimsum Mentai",
+
+            keju: "Mentai Keju",
+
+            mix: "Dimsum Mix",
+
+            original: "Dimsum Bakar Original",
+
+            lava: "Dimsum Bakar Lava",
+
+            bakarmentai: "Dimsum Bakar Mentai",
+
+            bakarkeju: "Dimsum Bakar Mentai Keju",
+
+            birthday: "Special Paket"
+
+        };
+
+
+        document.getElementById("judulKategori").innerText =
+            namaKategori[kategori];
+
+    }
+
+
+    /* =========================
+       TAMBAH KERANJANG
+    ========================= */
+
+    function tambahKeranjang(nama, harga, kategori) {
+
+        const itemLama =
+            keranjang.find(function(item) {
+
+                return item.nama === nama;
+
+            });
+
+
+        if (itemLama) {
+
+            itemLama.jumlah += 1;
+
+        } else {
+
+            keranjang.push({
+
+                nama: nama,
+
+                harga: harga,
+
+                jumlah: 1,
+
+                kategori: kategori
+
+            });
+
+        }
+
+
+        tampilkanKeranjang();
+
+        tampilkanNotifikasi(
+            nama + " ditambahkan ke keranjang.",
+            "success"
+        );
+
+    }
+
+
+    /* =========================
+       TAMPILKAN KERANJANG
+    ========================= */
+
+    function tampilkanKeranjang() {
+
+        const container =
+            document.getElementById("cartItems");
+
+
+        if (keranjang.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty-cart">
+                    Keranjang masih kosong.
+                    <br>
+                    Silakan pilih menu.
+                </div>
+            `;
+
+            document.getElementById("jumlahItem").innerText = "0";
+
+            document.getElementById("totalHarga").innerText =
+                "Rp0";
+
+            hitungKembalian();
+
+            return;
+
+        }
+
+
+        let html = "";
+
+        let jumlahItem = 0;
+
+        let total = 0;
+
+
+        keranjang.forEach(function(item, index) {
+
+            const subtotal =
+                item.harga * item.jumlah;
+
+            jumlahItem += item.jumlah;
+
+            total += subtotal;
+
+
+            html += `
+
+                <div class="cart-item">
+
+                    <div class="cart-item-name">
+                        ${item.nama}
+                    </div>
+
+                    <div class="cart-item-price">
+                        ${formatRupiah(item.harga)}
+                        × ${item.jumlah}
+                        =
+                        <strong>
+                            ${formatRupiah(subtotal)}
+                        </strong>
+                    </div>
+
+                    <div class="quantity-control">
+
+                        <div class="quantity-buttons">
+
+                            <button
+                                class="qty-btn"
+                                onclick="kurangiJumlah(${index})">
+                                −
+                            </button>
+
+                            <span class="qty-number">
+                                ${item.jumlah}
+                            </span>
+
+                            <button
+                                class="qty-btn"
+                                onclick="tambahJumlah(${index})">
+                                +
+                            </button>
+
+                        </div>
+
+
+                        <button
+                            class="remove-btn"
+                            onclick="hapusItem(${index})">
+
+                            Hapus
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+
+        container.innerHTML = html;
+
+
+        document.getElementById("jumlahItem").innerText =
+            jumlahItem;
+
+        document.getElementById("totalHarga").innerText =
+            formatRupiah(total);
+
+
+        hitungKembalian();
+
+    }
+
+
+    /* =========================
+       TAMBAH JUMLAH
+    ========================= */
+
+    function tambahJumlah(index) {
+
+        keranjang[index].jumlah += 1;
+
+        tampilkanKeranjang();
+
+    }
+
+
+    /* =========================
+       KURANGI JUMLAH
+    ========================= */
+
+    function kurangiJumlah(index) {
+
+        if (keranjang[index].jumlah > 1) {
+
+            keranjang[index].jumlah -= 1;
+
+        } else {
+
+            keranjang.splice(index, 1);
+
+        }
+
+
+        tampilkanKeranjang();
+
+    }
+
+
+    /* =========================
+       HAPUS ITEM
+    ========================= */
+
+    function hapusItem(index) {
+
+        keranjang.splice(index, 1);
+
+        tampilkanKeranjang();
+
+    }
+
+
+    /* =========================
+       HITUNG TOTAL
+    ========================= */
+
+    function hitungTotal() {
+
+        let total = 0;
+
+
+        keranjang.forEach(function(item) {
+
+            total +=
+                item.harga * item.jumlah;
+
+        });
+
+
+        return total;
+
+    }
+
+
+    /* =========================
+       HITUNG KEMBALIAN
+    ========================= */
+
+    function hitungKembalian() {
+
+        const total =
+            hitungTotal();
+
+
+        const pembayaran =
+            Number(
+                document.getElementById("pembayaran").value
+            ) || 0;
+
+
+        const kembalianElement =
+            document.getElementById("kembalian");
+
+
+        if (pembayaran >= total && total > 0) {
+
+            kembalianElement.innerText =
+                formatRupiah(pembayaran - total);
+
+        } else {
+
+            kembalianElement.innerText =
+                "Rp0";
+
+        }
+
+    }
+
+
+    /* =========================
+       KOSONGKAN
+    ========================= */
+
+    function kosongkanKeranjang() {
+
+        if (keranjang.length === 0) {
+
+            return;
+
+        }
+
+
+        if (
+            !confirm(
+                "Yakin ingin mengosongkan keranjang?"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        keranjang = [];
+
+        document.getElementById("pembayaran").value = "";
+
+        tampilkanKeranjang();
+
+    }
+
+
+    /* =========================
+       SIMPAN TRANSAKSI
+    ========================= */
+
+    async function simpanTransaksi() {
+
+        if (keranjang.length === 0) {
+
+            tampilkanNotifikasi(
+                "Keranjang masih kosong.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const total =
+            hitungTotal();
+
+
+        const pembayaran =
+            Number(
+                document.getElementById("pembayaran").value
+            ) || 0;
+
+
+        const tipe =
+            document.getElementById("tipe").value;
+
+
+        if (pembayaran < total) {
+
+            tampilkanNotifikasi(
+                "Uang pembayaran kurang.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const data = {
+
+            keranjang: keranjang,
+
+            tipe: tipe,
+
+            total: total,
+
+            pembayaran: pembayaran
+
+        };
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/simpan_transaksi",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify(data)
+
+                    }
+                );
+
+
+            const hasil =
+                await response.json();
+
+
+            if (hasil.success) {
+
+                tampilkanNotifikasi(
+                    "Transaksi berhasil disimpan! Nomor transaksi: " +
+                    hasil.nomor,
+                    "success"
+                );
+
+
+                alert(
+                    "TRANSAKSI BERHASIL\n\n" +
+                    "Nomor: " +
+                    hasil.nomor +
+                    "\n" +
+                    "Total: " +
+                    formatRupiah(total) +
+                    "\n" +
+                    "Pembayaran: " +
+                    formatRupiah(pembayaran) +
+                    "\n" +
+                    "Kembalian: " +
+                    formatRupiah(hasil.kembalian)
+                );
+
+
+                keranjang = [];
+
+                document.getElementById(
+                    "pembayaran"
+                ).value = "";
+
+
+                tampilkanKeranjang();
+
+            } else {
+
+                tampilkanNotifikasi(
+                    hasil.message ||
+                    "Transaksi gagal.",
+                    "error"
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            tampilkanNotifikasi(
+                "Terjadi kesalahan saat menyimpan transaksi.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       NOTIFIKASI
+    ========================= */
+
+    function tampilkanNotifikasi(
+        pesan,
+        tipe
+    ) {
+
+        const notification =
+            document.getElementById(
+                "notification"
+            );
+
+
+        notification.innerText =
+            pesan;
+
+
+        notification.className =
+            "notification " + tipe;
+
+
+        notification.style.display =
+            "block";
+
+
+        setTimeout(function() {
+
+            notification.style.display =
+                "none";
+
+        }, 3000);
+
+    }
+
+
+    /* =========================
+       AWAL
+    ========================= */
+
+    tampilkanKeranjang();
+
+</script>
+
+</body>
+</html>
